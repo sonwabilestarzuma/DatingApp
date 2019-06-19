@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using DatingApp.API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,13 @@ namespace DatingApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            // Add Identity services to the services container.
+            // services.AddIdentity<User, IdentityRole>()
+            //     .AddEntityFrameworkStores<DataContext>()
+            //     .AddDefaultTokenProviders();
+            // // Add other services
+
             services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(
                    Configuration.GetConnectionString("DefaultConnection")));
@@ -49,6 +58,9 @@ namespace DatingApp.API
             }
 
           //  app.UseHttpsRedirection();
+           // Add cookie-based authentication to the request pipeline.
+            //app.UseIdentity();
+
             app.UseCors(m => m.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
         }
