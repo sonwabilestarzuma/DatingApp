@@ -31,8 +31,8 @@ namespace DatingApp.API
         {
             
             // Add Identity services to the services container.
-            // services.AddIdentity<User, IdentityRole>()
-            //     .AddEntityFrameworkStores<DataContext>()
+            //   services.AddIdentity<User, IdentityRole>()
+            //   .AddEntityFrameworkStores<DataContext>()
             //     .AddDefaultTokenProviders();
             // // Add other services
 
@@ -42,6 +42,7 @@ namespace DatingApp.API
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
+            services.AddScoped<IAuthRepository, AuthRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
