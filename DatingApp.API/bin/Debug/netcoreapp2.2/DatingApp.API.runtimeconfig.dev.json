@@ -1,0 +1,9 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\CondoCONNECT2019\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\CondoCONNECT2019\\.nuget\\packages",
+      "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+    ]
+  }
+}
