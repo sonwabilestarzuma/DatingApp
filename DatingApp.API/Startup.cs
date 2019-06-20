@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
 using DatingApp.API.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API
 {
@@ -43,6 +46,51 @@ namespace DatingApp.API
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
             services.AddScoped<IAuthRepository, AuthRepository>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(cfg =>
+    {
+        cfg.RequireHttpsMetadata = false;
+        cfg.SaveToken = true;
+
+        cfg.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = Configuration["Tokens:Key"],
+            ValidAudience = Configuration["Tokens:Key"],
+            //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"])
+             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("Tokens:Key").Value))
+        };
+
+    });
+           // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //  .AddJwtBearer(options =>
+            //              {
+            //               options.TokenValidationParameters = new TokenValidationParameters()
+            //              {
+            //              ValidateIssuerSigningKey = true,
+            //                 IssuerSigningKey = new SymmetricSecurityKey
+            //               (Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings").Value)), 
+            //                  ValidateIssuer = false,
+            //                 ValidateAudience = false
+            //           };
+            //       });
+
+    //    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    //     .AddJwtBearer(options =>
+    //     {
+    //       options.TokenValidationParameters = new TokenValidationParameters
+    //       {
+    //         ValidateIssuer = true,
+    //         ValidateAudience = true,
+    //         ValidateLifetime = true,
+    //         ValidateIssuerSigningKey = true,
+    //         ValidIssuer = Configuration["Jwt:Issuer"],
+    //         ValidAudience = Configuration["Jwt:Issuer"],
+    //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+    //       };
+    //     });
+               
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,8 +110,9 @@ namespace DatingApp.API
            // Add cookie-based authentication to the request pipeline.
             //app.UseIdentity();
 
-            app.UseCors(m => m.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            app.UseMvc();
+        app.UseCors(m => m.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+         app.UseAuthentication();
+         app.UseMvc();
         }
     }
 }
