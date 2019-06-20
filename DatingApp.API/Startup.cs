@@ -55,6 +55,9 @@ namespace DatingApp.API
 
         cfg.TokenValidationParameters = new TokenValidationParameters()
         {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = Configuration["Tokens:Key"],
             ValidAudience = Configuration["Tokens:Key"],
