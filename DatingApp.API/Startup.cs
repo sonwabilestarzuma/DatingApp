@@ -50,8 +50,8 @@ namespace DatingApp.API
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(cfg =>
     {
-        cfg.RequireHttpsMetadata = false;
-        cfg.SaveToken = true;
+        // cfg.RequireHttpsMetadata = false;
+        // cfg.SaveToken = true;
 
         cfg.TokenValidationParameters = new TokenValidationParameters()
         {
